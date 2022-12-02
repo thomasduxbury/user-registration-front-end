@@ -54,7 +54,7 @@ export const UserRegistrationForm = () => {
     setEmailInvalid(false);
     setPostcodeInvalid(false);
     let errors = false;
-    if (password.length === 0) {
+    if (!validPassword(password)) {
       setPasswordInvalid(true);
       errors = true;
     }
@@ -69,14 +69,19 @@ export const UserRegistrationForm = () => {
     return !errors;
   }
 
+  const validPassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/;
+    return regex.test(password);
+  }
+
   const validEmail = (email) => {
-    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return regex.test(email);
   }
 
   const validPostcode = (postcode) => {
     postcode = postcode.replace(/\s/g, "").toUpperCase();
-    const regex = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]{0,1} ?[0-9][A-Z]{2}$/i
+    const regex = /^[A-Z]{1,2}[0-9]{1,2}[A-Z]{0,1} ?[0-9][A-Z]{2}$/i;
     return regex.test(postcode);
   }
 
@@ -88,15 +93,15 @@ export const UserRegistrationForm = () => {
       <p className="mt-2 text-center text-sm text-gray-600 mt-5">
         Complete the form to sign up {' '}
       </p>
-      { duplicateEmail &&
-      <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-400">
-        This email has already registered
-      </h2>
+      {duplicateEmail &&
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-400">
+          This email has already registered
+        </h2>
       }
-      { userCreated &&
-      <h2 className="mt-6 text-center text-3xl font-extrabold text-green-400">
-        Thanks for registering!
-      </h2>
+      {userCreated &&
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-green-400">
+          Thanks for registering!
+        </h2>
       }
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
@@ -117,7 +122,7 @@ export const UserRegistrationForm = () => {
             Password
           </label>
           <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="************" value={password} onChange={(e) => setPassword(e.target.value)} />
-          {passwordInvalid && <p className="text-red-500 text-xs italic">Please choose a password.</p>}
+          {passwordInvalid && <p className="text-red-500 text-xs italic">Please enter a password which contains a minimum of eight characters, at least one uppercase letter, one lowercase letter and one number.</p>}
         </div>
         <div className="mb-6">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="postcode">
